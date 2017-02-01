@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LinkedIn Clone</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <% if (userLoggedIn) { %>
+          <li><a href="/profile/<%= currentUser._id %>">View Profile</a></li>
+          <li><a href="/profile/<%= currentUser._id %>/edit">Edit Profile</a></li>
+        <% } else { %>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Sign Up</a></li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <hr>
+    <% posts.forEach((post) => { %>
+      <strong><%= post._creator.name  %></strong>
+      <%= post.content %>
+    <%  }) %>
+  </body>
+</html>
