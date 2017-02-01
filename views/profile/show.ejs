@@ -1,0 +1,10 @@
+<%= user.name  %>
+<%= user.imageUrl  %>
+<%= user.jobTitle  %>
+<%= user.company  %>
+
+<% if (userLoggedIn){ %>
+  <%= user.email  %>
+  <%= user.username  %>
+  <%= user.summary  %>
+<% } %>
