@@ -1,16 +1,18 @@
-const express        = require('express');
-const path           = require('path');
-const expressLayouts = require('express-ejs-layouts');
-const favicon        = require('serve-favicon');
-const logger         = require('morgan');
-const cookieParser   = require('cookie-parser');
-const bodyParser     = require('body-parser');
-const mongoose       = require('mongoose');
-const session        = require("express-session");
-const MongoStore     = require("connect-mongo")(session);
+const express           = require('express');
+const path              = require('path');
+const expressLayouts    = require('express-ejs-layouts');
+const favicon           = require('serve-favicon');
+const logger            = require('morgan');
+const cookieParser      = require('cookie-parser');
+const bodyParser        = require('body-parser');
+const mongoose          = require('mongoose');
+const session           = require("express-session");
+const MongoStore        = require("connect-mongo")(session);
+const { authorizeUser } = require('./middleware/user-auth');
 
 mongoose.connect('mongodb://localhost/linkedin-clone-development');
 const app = express();
+
 
 app.use(session({
   secret: 'basic-auth-secret',
@@ -41,6 +43,14 @@ const users = require('./routes/users');
 const auth  = require('./routes/authentication');
 const prof  = require('./routes/profiles');
 const posts = require('./routes/posts');
+
+app.use(authorizeUser);
+app.use( (req, res, next) => {
+  if (typeof(req.session) !== 'undefined' && req.session.currentUser){
+    res.locals.currentUser = Object.create(req.session.currentUser);
+  }
+  next();
+});
 
 app.use('/', index);
 app.use('/users', users);
